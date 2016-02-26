@@ -3,9 +3,16 @@
  */
 package twitter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * SocialNetwork provides methods that operate on a social network.
@@ -41,8 +48,28 @@ public class SocialNetwork {
      *         either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
-    }
+        Map<String, Set<String>> SocialNetwork = new HashMap<String, Set<String>>();
+        List<Tweet> socialtweet = new ArrayList<Tweet>(tweets);
+        for (Tweet tweet: socialtweet){
+            Set<String> blank = new HashSet<String>();
+            Set<String> matchstring = Extract.getMentionedUsers(Arrays.asList(tweet));
+            SocialNetwork.put(tweet.getAuthor().toLowerCase(),matchstring);
+            for (String author: matchstring){
+                if(!author.equals(tweet.getAuthor())){
+                    SocialNetwork.get(tweet.getAuthor().toLowerCase()).add(author.toLowerCase());
+                }
+                }
+            }
+        /**
+        for(Map.Entry<String, Set<String>> entry : SocialNetwork.entrySet()){
+            String key = entry.getKey();
+            if(SocialNetwork.containsValue(key)){
+                SocialNetwork.remove(key);
+            }                        
+         }  */
+        return SocialNetwork;            
+        }
+        //throw new RuntimeException("not implemented");
 
     /**
      * Find the people in a social network who have the greatest influence, in
@@ -54,7 +81,36 @@ public class SocialNetwork {
      *         descending order of follower count.
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
+        List<String> InfluenceList = new ArrayList<String>();
+        Map<String, Integer> influencers = new HashMap<String, Integer>();
+        int influenceCount;
+        for (Set<String> follows : followsGraph.values()){
+            for(String i: follows){
+                if(influencers.containsKey(i)){
+                    influenceCount = influencers.get(i) + 1;
+                    influencers.put(i.toLowerCase(), influenceCount);
+                }
+                else{
+                    influencers.put(i.toLowerCase(), 1);
+                }
+            }
+        }
+        
+        //sort the influencers and put them in InfluenceList
+        while(!influencers.isEmpty()){
+            int topfollowers = Collections.max(influencers.values());
+            for (String name : influencers.keySet()){
+                if(influencers.get(name).equals(topfollowers)){
+                    InfluenceList.add(name);
+                    influencers.remove(name);
+                    break;
+                }
+            }
+        }
+        return InfluenceList;
     }
-
-}
+    
+            
+        
+        //throw new RuntimeException("not implemented");
+    }

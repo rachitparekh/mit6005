@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * Filter consists of methods that filter a list of tweets for those matching a
  * condition.
@@ -30,6 +32,7 @@ public class Filter {
      *         the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
+        assertFalse(tweets.isEmpty());
         List<Tweet> tweetsfromusername = new ArrayList<>();
         for (Tweet tweet : tweets) {
             if (tweet.getAuthor().toLowerCase().equals(username.toLowerCase())) {
@@ -96,6 +99,7 @@ public class Filter {
             for (String st : wordsfromtweet) {
                 if (loweredList.contains(st.toLowerCase())) {
                     tweetsWithKeyWords.add(tweet);
+                    break;
                 }
 
             }
