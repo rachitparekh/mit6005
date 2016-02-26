@@ -56,7 +56,7 @@ public class SocialNetworkTest {
     
     @Test
     public void testInfluencersEmpty() {
-        Map<String, Set<String>> followsGraph = new HashMap<>();
+        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
         List<String> influencers = SocialNetwork.influencers(followsGraph);
         
         assertTrue("expected empty list", influencers.isEmpty());
